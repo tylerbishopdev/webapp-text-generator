@@ -4,8 +4,8 @@ export const API_KEY = `${process.env.NEXT_PUBLIC_APP_KEY}`
 export const API_URL = `${process.env.NEXT_PUBLIC_API_URL}`
 export const IS_WORKFLOW = `${process.env.NEXT_PUBLIC_APP_TYPE_WORKFLOW}` === 'true'
 export const APP_INFO: AppInfo = {
-  title: 'Text Generator APP',
-  description: 'App description',
+  title: 'ezTyler',
+  description: 'Tyler writer + ez-ID and Ezoic mega-expert; equipped with ezoic research and specifcally traned on Ezoic marketplace POV. Tyler writes in a style thats trained to write in his style trained on 740 blogs. He was fine-tuned to produce articles, content outlines, and stories specifically for ez-ID and Ezoics marketplace POV.',
   copyright: '',
   privacy_policy: '',
   default_language: 'en-US',

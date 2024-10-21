@@ -383,186 +383,206 @@ const TextGeneration = () => {
 
   const renderRes = (task?: Task) => (
     <Result
-      isWorkflow={IS_WORKFLOW}
-      isCallBatchAPI={isCallBatchAPI}
-      isPC={isPC}
-      isMobile={isMobile}
-      isError={task?.status === TaskStatus.failed}
-      promptConfig={promptConfig}
-      inputs={isCallBatchAPI ? (task as Task).params.inputs : inputs}
-      controlSend={controlSend}
-      controlRetry={task?.status === TaskStatus.failed ? controlRetry : 0}
-      controlStopResponding={controlStopResponding}
-      onShowRes={showResSidebar}
-      taskId={task?.id}
-      onCompleted={handleCompleted}
-      visionConfig={visionConfig}
-      completionFiles={completionFiles}
-    />
+      isWorkflow= { IS_WORKFLOW }
+  isCallBatchAPI = { isCallBatchAPI }
+  isPC = { isPC }
+  isMobile = { isMobile }
+  isError = { task?.status === TaskStatus.failed
+}
+promptConfig = { promptConfig }
+inputs = { isCallBatchAPI?(task as Task).params.inputs : inputs }
+controlSend = { controlSend }
+controlRetry = { task?.status === TaskStatus.failed ? controlRetry : 0}
+controlStopResponding = { controlStopResponding }
+onShowRes = { showResSidebar }
+taskId = { task?.id }
+onCompleted = { handleCompleted }
+visionConfig = { visionConfig }
+completionFiles = { completionFiles }
+  />
   )
 
-  const renderBatchRes = () => {
-    return (showTaskList.map(task => renderRes(task)))
-  }
+const renderBatchRes = () => {
+  return (showTaskList.map(task => renderRes(task)))
+}
 
-  const renderResWrap = (
-    <div
-      ref={resRef}
-      className={
-        cn(
+const renderResWrap = (
+  <div
+      ref= { resRef }
+className = {
+  cn(
           'flex flex-col h-full shrink-0',
-          isPC ? 'px-10 py-8' : 'bg-gray-50',
-          isTablet && 'p-6', isMobile && 'p-4')
+    isPC? 'px-10 py-8' : 'bg-gray-50',
+    isTablet && 'p-6', isMobile && 'p-4')
       }
     >
-      <>
-        <div className='shrink-0 flex items-center justify-between'>
-          <div className='flex items-center space-x-3'>
-            <div className={s.starIcon}></div>
-            <div className='text-lg text-gray-800 font-semibold'>{t('app.generation.title')}</div>
+  <>
+  <div className='flex items-center justify-between shrink-0' >
+    <div className='flex items-center space-x-3' >
+      <div className={ s.starIcon }> </div>
+        < div className = 'text-lg font-semibold text-zinc-900' > { t('app.generation.title') } </div>
           </div>
-          <div className='flex items-center space-x-2'>
-            {allFailedTaskList.length > 0 && (
+          < div className = 'flex items-center space-x-2' >
+          {
+            allFailedTaskList.length > 0 && (
               <div className='flex items-center'>
                 <AlertCircle className='w-4 h-4 text-[#D92D20]' />
-                <div className='ml-1 text-[#D92D20]'>{t('app.generation.batchFailed.info', { num: allFailedTaskList.length })}</div>
-                <Button
-                  type='primary'
-                  className='ml-2 !h-8 !px-3'
-                  onClick={handleRetryAllFailedTask}
-                >{t('app.generation.batchFailed.retry')}</Button>
-                <div className='mx-3 w-[1px] h-3.5 bg-gray-200'></div>
-              </div>
-            )}
-            {allSuccessTaskList.length > 0 && (
-              <ResDownload
-                isMobile={isMobile}
-                values={exportRes}
-              />
-            )}
-            {!isPC && (
-              <div
-                className='flex items-center justify-center cursor-pointer'
-                onClick={hideResSidebar}
-              >
-                <XMarkIcon className='w-4 h-4 text-gray-800' />
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className='grow overflow-y-auto'>
-          {!isCallBatchAPI ? renderRes() : renderBatchRes()}
-          {!noPendingTask && (
-            <div className='mt-4'>
-              <Loading type='area' />
-            </div>
-          )}
-        </div>
-      </>
+                  < div className='ml-1 text-[#D92D20]' > { t('app.generation.batchFailed.info', { num: allFailedTaskList.length })
+          } </div>
+            < Button
+type = 'primary'
+className = 'ml-2 !h-8 !px-3'
+onClick = { handleRetryAllFailedTask }
+  > { t('app.generation.batchFailed.retry') } </Button>
+  < div className = 'mx-3 w-[1px] h-3.5 bg-gray-200' > </div>
     </div>
+            )}
+{
+  allSuccessTaskList.length > 0 && (
+    <ResDownload
+                isMobile={ isMobile }
+  values = { exportRes }
+    />
+            )
+}
+{
+  !isPC && (
+    <div
+                className='flex items-center justify-center cursor-pointer'
+  onClick = { hideResSidebar }
+    >
+    <XMarkIcon className='w-4 h-4 text-gray-800' />
+      </div>
+            )
+}
+</div>
+  </div>
+
+  < div className = 'overflow-y-auto grow' >
+    {!isCallBatchAPI ? renderRes() : renderBatchRes()}
+{
+  !noPendingTask && (
+    <div className='mt-4' >
+      <Loading type='area' />
+        </div>
+          )
+}
+</div>
+  </>
+  </div>
   )
 
-  if (appUnavailable)
-    return <AppUnavailable isUnknwonReason={isUnknwonReason} errMessage={!hasSetAppConfig ? 'Please set APP_ID and API_KEY in config/index.tsx' : ''} />
+if (appUnavailable)
+  return <AppUnavailable isUnknwonReason={ isUnknwonReason } errMessage = {!hasSetAppConfig ? 'Please set APP_ID and API_KEY in config/index.tsx' : ''} />
 
-  if (!APP_INFO || !promptConfig)
-    return <Loading type='app' />
+if (!APP_INFO || !promptConfig)
+  return <Loading type='app' />
 
   return (
-    <>
-      <div className={cn(isPC && 'flex', 'h-screen bg-gray-50')}>
-        {/* Left */}
-        <div className={cn(isPC ? 'w-[600px] max-w-[50%] p-8' : 'p-4', 'shrink-0 relative flex flex-col pb-10 h-full border-r border-gray-100 bg-white')}>
-          <div className='mb-6'>
-            <div className='flex justify-between items-center'>
-              <div className='flex items-center space-x-3'>
-                <div className={cn(s.appIcon, 'shrink-0')}></div>
-                <div className='text-lg text-gray-800 font-semibold'>{APP_INFO.title}</div>
-              </div>
-              {!isPC && (
-                <Button
-                  className='shrink-0 !h-8 !px-3'
-                  onClick={showResSidebar}
-                >
-                  <div className='flex items-center space-x-2 text-primary-600 text-[13px] font-medium'>
-                    <div className={s.starIcon}></div>
-                    <span>{t('app.generation.title')}</span>
-                  </div>
-                </Button>
-              )}
-            </div>
-            {APP_INFO.description && (
-              <div className='mt-2 text-xs text-gray-500'>{APP_INFO.description}</div>
-            )}
-          </div>
-
-          <TabHeader
-            items={[
-              { id: 'create', name: t('app.generation.tabs.create') },
-              { id: 'batch', name: t('app.generation.tabs.batch') },
-            ]}
-            value={currTab}
-            onChange={setCurrTab}
-          />
-
-          <div className='grow h-20 overflow-y-auto'>
-            <div className={cn(currTab === 'create' ? 'block' : 'hidden')}>
-              <RunOnce
-                inputs={inputs}
-                onInputsChange={setInputs}
-                promptConfig={promptConfig}
-                onSend={handleSend}
-                visionConfig={visionConfig}
-                onVisionFilesChange={setCompletionFiles}
-              />
-            </div>
-            <div className={cn(isInBatchTab ? 'block' : 'hidden')}>
-              <RunBatch
-                vars={promptConfig.prompt_variables}
-                onSend={handleRunBatch}
-                isAllFinished={allTaskRuned}
-              />
-            </div>
-          </div>
-
-          {/* copyright */}
-          <div className='fixed left-8 bottom-4  flex space-x-2 text-gray-400 font-normal text-xs'>
-            <div className="">© {APP_INFO.copyright || APP_INFO.title} {(new Date()).getFullYear()}</div>
-            {APP_INFO.privacy_policy && (
-              <>
-                <div>·</div>
-                <div>{t('app.generation.privacyPolicyLeft')}
-                  <a
-                    className='text-gray-500'
-                    href={APP_INFO.privacy_policy}
-                    target='_blank'>{t('app.generation.privacyPolicyMiddle')}</a>
-                  {t('app.generation.privacyPolicyRight')}
+  <>
+  <div className= { cn(isPC && 'flex', 'h-screen bg-gray-50')}>
+    {/* Left */ }
+    < div className = { cn(isPC? 'w-[600px] max-w-[50%] p-8' : 'p-4', 'shrink-0 relative flex flex-col pb-10 h-full border-r border-gray-100 bg-white') } >
+      <div className='mb-6' >
+        <div className='flex items-center justify-between' >
+          <div className='flex items-center space-x-3' >
+            <div className={ cn(s.appIcon, 'shrink-0') }> </div>
+              < div className = 'text-lg font-semibold text-gray-800' > { APP_INFO.title } </div>
                 </div>
-              </>
-            )}
-          </div>
+{
+  !isPC && (
+    <Button
+                  className='shrink-0 !h-8 !px-3'
+  onClick = { showResSidebar }
+    >
+    <div className='flex items-center space-x-2 text-primary-600 text-[13px] font-medium' >
+      <div className={ s.starIcon }> </div>
+        < span > { t('app.generation.title') } </span>
         </div>
+        </Button>
+              )
+}
+</div>
+{
+  APP_INFO.description && (
+    <div className='mt-2 text-xs text-gray-500' > { APP_INFO.description } </div>
+            )
+}
+</div>
 
-        {/* Result */}
-        {isPC && (
-          <div className='grow h-full'>
-            {renderResWrap}
-          </div>
-        )}
+  < TabHeader
+items = {
+  [
+    { id: 'create', name: t('app.generation.tabs.create') },
+    { id: 'batch', name: t('app.generation.tabs.batch') },
+            ]}
+value = { currTab }
+onChange = { setCurrTab }
+  />
 
-        {(!isPC && isShowResSidebar) && (
-          <div
-            className={cn('fixed z-50 inset-0', isTablet ? 'pl-[128px]' : 'pl-6')}
-            style={{
-              background: 'rgba(35, 56, 118, 0.2)',
-            }}
-          >
-            {renderResWrap}
-          </div>
-        )}
-      </div>
+  <div className='h-20 overflow-y-auto grow' >
+    <div className={ cn(currTab === 'create' ? 'block' : 'hidden') }>
+      <RunOnce
+                inputs={ inputs }
+onInputsChange = { setInputs }
+promptConfig = { promptConfig }
+onSend = { handleSend }
+visionConfig = { visionConfig }
+onVisionFilesChange = { setCompletionFiles }
+  />
+  </div>
+  < div className = { cn(isInBatchTab? 'block' : 'hidden') } >
+    <RunBatch
+                vars={ promptConfig.prompt_variables }
+onSend = { handleRunBatch }
+isAllFinished = { allTaskRuned }
+  />
+  </div>
+  </div>
+
+{/* copyright */ }
+<div className='fixed flex space-x-2 text-xs font-normal text-gray-400 left-8 bottom-4' >
+  <div className="" >© { APP_INFO.copyright || APP_INFO.title } { (new Date()).getFullYear() } </div>
+{
+  APP_INFO.privacy_policy && (
+    <>
+    <div>·</div>
+      < div > { t('app.generation.privacyPolicyLeft') }
+      < a
+  className = 'text-gray-500'
+  href = { APP_INFO.privacy_policy }
+  target = '_blank' > { t('app.generation.privacyPolicyMiddle') } </a>
+  { t('app.generation.privacyPolicyRight') }
+  </div>
     </>
+            )
+}
+</div>
+  </div>
+
+{/* Result */ }
+{
+  isPC && (
+    <div className='h-full grow' >
+      { renderResWrap }
+      </div>
+        )
+}
+
+{
+  (!isPC && isShowResSidebar) && (
+    <div
+            className={ cn('fixed z-50 inset-0', isTablet ? 'pl-[128px]' : 'pl-6') }
+  style = {{
+    background: 'rgba(35, 56, 118, 0.2)',
+            }
+}
+          >
+  { renderResWrap }
+  </div>
+        )}
+</div>
+  </>
   )
 }
 
